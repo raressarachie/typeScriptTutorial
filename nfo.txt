@@ -1,0 +1,324 @@
+﻿LOG 1:
+
+Typescript helpful info:
+
+Properties:
+ - typed superset of JavaScript
+ - pure object oriented with classes, interfaces and statically typed
+ - The TypeScript compiler (tsc) converts the instructions written in TypeScript to its JavaScript equivalent.
+
+Data Types:
+
+    -Number:	number ( Double precision 64-bit floating point values. It can be used to represent both, integers and fractions)
+    -String:	string	( Represents a sequence of Unicode characters )
+    -Boolean: boolean ( Represents logical values, true and false )
+    -Void: void ( Used on function return types to represent non-returning functions )
+    -Null: null ( Represents an intentional absence of an object value )
+    -Undefined: ( undefined	Denotes value given to all uninitialized variables )
+
+Variable definitions:
+
+    1. var name:string = ”mary”
+    2. var name:string
+    3. var name = ”mary”
+    4. var name;
+    use let and const instead of var
+
+Above info was learned from tutorials point ^
+
+The following info is learned from pluralsight(everything below this line):
+
+    -installed typescript and configured the project
+    -learned to use tsconfig.json and compiler options
+    -learned config inheritance(keyword : extends)
+    
+    !!!used build task from tutorial but it's deprecated
+    tried other options, I still prefer running tsc from the terminal
+
+useful compiler options:
+    - watch (watches for changes in the files)
+    - sourceMap (use and generate source maps on JavaScript source files)
+    - outDir (to specify where the js generated after compiling ts to be stored)
+
+ new game starting from player: ${name} backtick for when you use expressions in string ${name} - expression
+
+ type can be declared or infered by the compiler
+
+Other built-in types:
+    Void
+    null
+    undefined
+    any - can have any type(default)
+    never - can't ever have a type
+    also observed that HTMLElement and other html types exist further applying the strongly typed character of ts
+
+Union types:
+
+    let someValue : string | number; - can be either a string or a number
+
+    --strictNullChecks - makes null and undefined invalid if not in union(added it to compiler options)
+    ex: let nullable :string|null;
+    nullable = null possible; 
+    let someValue : string | number | undefined; -possible
+
+Type assertions:
+    let value: any = 5;         
+                            type          method for numbers
+    let fixedString: string = (<number>value).toFixed(4)
+    OR
+    let fixedString: string = (value as number).toFixed(4)
+
+understood control flow-based analysys of the compiler 
+    ex:
+    let messagesElement: HTMLElement | null = document.getElementById('messages'); 
+    if(messagesElement === null)
+    {
+        //type only null
+        return messagesElement;
+    }
+
+Functions:   type annotations for functions   
+    ex:   function func(score: number, message?: string ): string{}
+                                ^                  ^           ^return type of the func
+                         return type of score    return type of message
+LOG 2:
+
+Functions contd. :
+    message! tells the compiler that message may be undefined
+    message? is an optional due to '?'
+        - in javascript all params are optional
+        - in ts only the params specified by '?' are optional
+    
+    add --noimplicitAny compiler option for checking for unintentional 'any' variables
+
+    Default-Initialized parameters
+            
+            Initialize the parameter of a function with a default hardcoded value, it acts as an 
+        optional and changes value upon function call with a parameter.
+        
+        ex: function  sendGreeting(greeting: string = 'Good morning'): void
+        { console.log(greeting) }
+
+        sendGreeting(); // prints 'Good morning!'
+        sendGreeting('Good afternoon') // prints 'Good afternoon'
+
+    Arrow Functions: 
+        like lambdas
+
+        parameters => function body
+        
+        ex:                     function body                     
+            let square = x => x*x;    
+                         ^
+                      parameter
+            let result = square(4); // call of the lambda function 
+                                    // through the assigned variable
+            let adder = (a,b) => a+b;// if multiple parameters add paranthesis
+            let greeting = () => log.console('stuff') //no parameters arrow func
+            greeting(); // prints 'stuff'
+        
+        ex filter array:
+            let scores: number[] = [70, 125, 85, 110];
+            let highScores: number[];
+            //filter(element,index,array) creates a new array with the elements that passed the test 
+            highScores = scores.filter((element,index,array) => {//braces required due to multiple lines of code being present
+                if(element > 100){
+                    return true;// return required due to multiple lines of code present
+                }
+            });
+    Using function types
+        //logger will be able to take the value of a function of type void and parameter of type string
+        let logger : (value: string) => void; 
+
+Custom types:
+
+                 Interface vs. Classes
+    Define a new type      | Define a new type
+    Properties(signatures) | Properties(with implementation)
+    Methods(signatures)    | Methods(with implementation)
+    Cannot be instantiated | Can be instantiated
+
+    ex Interface:
+
+    interface Employee{
+        name: string; //property
+        title: string;
+        scheduleMeeting(topic: string) => void; // function of type void definition
+    }
+
+
+
+    Structural type system
+        a.k.a. duck typing(if it walks like a duck and it quacks like a duck, then it must be a duck)
+        
+        if and object literal has all the properties of an interface it is consider that it implements it event 
+        though it isn't specified
+
+        ex considering the employee interface from above:
+        let developer = {
+            name: 'Michelle'
+            title: 'Senior typescript developer'
+            editor: 'Visual studio code'
+        }
+        let newEmployee: Employee = developer; // newEmployee is of type Employee beacause the literal implements
+                                              //the employee interface even though it has an extra property
+
+        Interfaces are a design tool, interface Ts code doesn't  transpile to Js
+
+    Class members:
+        Method Implementations
+        Property Implementations
+        Accessors(getters and setters)
+        Access modifiers:
+            - Public(default)
+            - Private(cannot be accessed from outside the class)
+            - Protected(can only be accesed inside the 
+                        class and classes that inherit it)
+    Ex: 
+    class Developer{
+        department: string;
+        //added the private acces modifier, _ is used just as a preference
+        private _title: string;
+        //Accessors
+        get title():string{
+            return this._title;
+        }
+        set title(newTitle: string){
+            this._title = newTtitle.toUpperCase();
+        }
+        //class method, doesn't have function before it
+        documentRequirements(requirements: string): void{
+            console.log(requirements);
+        }
+    }
+    if i wanted a read only property set title wouldn't be used
+    creating a new instance
+        let dev: Developer = new Developer();
+        dev.department = 'A depatment'
+    
+    extending a class uses 'extends' 
+    Implementing an interface:
+        use the above mentioned Employee interface
+    class Engineer implements Employee{
+        //could use accesors for custom logic in properties
+        name: string;
+        title: string;
+        // implementation of the function
+        logID(){
+            return `${this.name}_${this.title}`;
+        }
+    }
+    Classes in ts are writen in the coresponding js 
+
+    Configuring a project with multiple files :
+    
+        File refference(dependencies)
+            ref =>
+            /// <reference path="" />
+        Also added "files":[
+            "./app.ts"
+        ] to the compiler options which essentialy tells the compiler which files to compile
+        And furthermore added  "outFile": "../js/app.js" which essentialy concatenates
+        all js output files into one single file in the corect order
+    
+    Static members
+        members related to the class and not to an instance of the class
+
+        created the same as any member but with the notation 'static' before the identifier
+        ex: static someString: string = 'a string';
+
+        accesing them is done by the class name and not the instance name:
+        ex: ClassName.aStaticMember
+
+    Constructors 
+        default one exists
+
+        ex:
+        class Developer{
+            constructor(){
+                console.log('Creating a new developer')
+            }
+        }
+
+        class WebDeveloper extends Developer{
+            readonly favoriteEditor: string;// readonly is an acces modifier that doesn't 
+            //allow the parameter to be modified after its declaration or outside the constructor
+            constructor(editor: string){
+                super();// !!!Mandatory call for child classes to the parent class constructor
+                this.favoriteEditor = editor;
+            }
+        }
+    proceed to refactor the code from the app to use classes 
+
+    learned short form ts constructor
+    constructor(public player: Player, public problemCount: number, public factor: number){}
+
+    use Type(variable: DifferentType) to cast to a type by using the Type constructor
+    
+Typescript modules
+    
+    -allows encapsulation
+    -reusable
+    -create higher-level abstractions
+
+    Exporting declarations:
+
+        export interface Person { }
+
+        export default class Employee { }// default item exported
+
+        class Manager{} // not available for export
+
+    Export statement:
+        exports everything in the same statement, there is no default 
+        export {Person, hireDeveloper, Employee as Staff Member}
+                                                ^ use an alias by the exported class
+
+    Importing in the consuming module
+        import{Person, hireDeveloper} from './person'
+        import Worker from './person'// imports the default from person as Worker
+        import{StaffMember as CoWorker} from './person';// import as alias
+        
+        import * as HR from './person' //import the whole module   
+            using it
+            HR.hireDeveloper();
+
+    refactored the app to use modules
+    added "module": "commonjs" to config
+
+    Relative vs Non-Relative imports
+        relative: directs to a specific location(uses '.','..','/')
+        non-relative: uses no reference just a name
+
+        use relative for your modules
+        use non-relative for 3rd party modules
+
+    Module Resolution Strategies
+        tsc --moduleResolution Classic | Node
+
+        Classsic                    | Node
+        AMD, System or 2015 modules | CommonJS, UMD
+        ----------------------------|-------------------
+        Simple                      | Closely mirrors Node 
+                                    | module resolution
+        ----------------------------|---------------------
+        Less configurable           | More configurable
+
+    !!!When having issues with locating modules add "traceResolution": true
+
+Type declaration files
+    aka type definition files
+    aka type libraries
+
+    TS wrapper for js libraries
+        - types for variables, functions
+        - define valid property names
+        - define fuction parameters
+    development-time tool  
+
+    filename.d.ts
+
+    https://microsoft.github.io/TypeSearch/
+    installed lodash and used it added lodash to system.config path
+
+    

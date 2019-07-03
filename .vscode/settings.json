@@ -1,0 +1,26 @@
+{
+    "files.autoSave": "afterDelay",
+
+    "vsicons.presets.angular": false,
+
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/.gitignore": true
+    },
+
+    "editor.fontFamily": "Consolas, 'Courier New', monospace",
+    "editor.fontSize": 14,
+    "editor.quickSuggestions": true,
+    "editor.parameterHints": true,
+    "editor.wordBasedSuggestions": true,
+    "editor.selectionHighlight": false,
+    "editor.suggestOnTriggerCharacters": false,
+
+    "window.zoomLevel": 1,
+
+    "editor.cursorBlinking": "solid",
+    "typescript.tsdk": "/Users/admin/AppData/Roaming/npm/node_modules/typescript/lib"
+}
