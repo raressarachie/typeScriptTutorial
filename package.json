@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@types/lodash": "^4.14.135",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "systemjs": "^0.20.12"
   }
 }
